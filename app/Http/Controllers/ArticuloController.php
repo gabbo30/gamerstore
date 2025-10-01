@@ -36,22 +36,14 @@ class ArticuloController extends Controller
 
     public function update_article(Request $request)
     {
-        $articulo = Articulo::find($request->id_articulo);
+        $updated = Articulo::where('id_articulo', $request->id_art)->update([
+                'nombre_articulo' => $request->nombre_art,
+                'precio_articulo' => $request->precio_art,
+            ]);
 
-        if (!$articulo)
-        {
-            return back()->with("Error", "Producto no encontrado");
-        }
-
-        $articulo->nombre_articulo = $request->nombre_art;
-        $articulo->precio_articulo = $request->precio_art;
-
-        if ($articulo->save())
-        {
+        if ($updated) {
             return back()->with("Bien", "Producto actualizado");
-        }
-        else
-        {
+        } else {
             return back()->with("Error", "Producto NO actualizado");
         }
     }

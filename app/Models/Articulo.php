@@ -9,10 +9,12 @@ class Articulo extends Model
     //
     use HasFactory;
 
-    protected $table = 'articulos'; // nombre de la tabla
+    protected $table = 'articulos';
+
+    protected $primaryKey = 'id_articulo';
 
     protected $fillable = [
-        'nombre',
-        'precio'
+        'nombre_articulo',
+        'precio_articulo'
     ];
 }
