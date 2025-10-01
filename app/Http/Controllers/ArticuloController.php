@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Articulo;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class ArticuloController extends Controller
 {
     //
@@ -13,5 +15,44 @@ class ArticuloController extends Controller
     {
         $articulos = Articulo::all();
         return view('welcome', compact('articulos'));
+    }
+
+    public function create_article(Request $request)
+    {
+        $articulo = new Articulo();
+        $articulo->nombre_articulo = $request->nombre_art;
+        $articulo->precio_articulo = $request->precio_art;
+
+        if ($articulo->save())
+        {
+            return back()->with("Bien", "Producto registrado");
+        }
+        else
+        {
+            return back()->with("Error", "Producto NO registrado");
+        }
+        // return 0;
+    }
+
+    public function update_article(Request $request)
+    {
+        $articulo = Articulo::find($request->id_articulo);
+
+        if (!$articulo)
+        {
+            return back()->with("Error", "Producto no encontrado");
+        }
+
+        $articulo->nombre_articulo = $request->nombre_art;
+        $articulo->precio_articulo = $request->precio_art;
+
+        if ($articulo->save())
+        {
+            return back()->with("Bien", "Producto actualizado");
+        }
+        else
+        {
+            return back()->with("Error", "Producto NO actualizado");
+        }
     }
 }

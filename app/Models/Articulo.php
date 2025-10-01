@@ -13,7 +13,6 @@ class Articulo extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',
         'precio'
     ];
 }

@@ -1,75 +1,118 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GamerStore - Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
+    <nav class="navbar navbar-expand bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🎮 GamerStore</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <!-- HEADER -->
-    <header class="flex justify-between items-center bg-white shadow px-6 py-4">
-        <div class="text-xl font-bold">🎮 GamerStore</div>
-        <button class="text-red-500 font-semibold hover:underline">Cerrar sesión</button>
-    </header>
-
-    <!-- MAIN CONTAINER -->
-    <div class="flex p-6 gap-6">
-
-        <!-- SIDEBAR IZQUIERDA -->
-        <aside class="w-1/3 bg-white shadow p-4 rounded-lg">
-            <!-- Tabs -->
-            <div class="flex border-b mb-4">
-                <button class="px-4 py-2 text-blue-600 border-b-2 border-blue-600 font-semibold">Artículos</button>
-                <button class="px-4 py-2 text-gray-600 hover:text-blue-600">Clientes</button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </nav>
 
-            <!-- Formulario -->
-            <form class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nombre artículo</label>
-                    <input type="text" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Precio</label>
-                    <input type="number" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                    Guardar
-                </button>
-            </form>
-        </aside>
-
-        <!-- TABLA DERECHA -->
-        <section class="flex-1 bg-white shadow p-4 rounded-lg">
-            <table class="w-full border-collapse">
-                <thead>
-                    <tr class="border-b">
-                        <th class="px-4 py-2 text-left">ID</th>
-                        <th class="px-4 py-2 text-left">Nombre artículo</th>
-                        <th class="px-4 py-2 text-left">Precio</th>
-                        <th class="px-4 py-2 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
+    <div class="pt-3" style="padding:5%;">
+        <div class="row">
+        
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Código (ID)</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach($articulos as $articulo)
-                        <tr class="border-b">
-                            <td class="px-4 py-2">{{ $articulo->id_articulo }}</td>
-                            <td class="px-4 py-2">{{ $articulo->nombre_articulo }}</td>
-                            <td class="px-4 py-2">{{ $articulo->precio_articulo }}</td>
-                            <td class="px-4 py-2">
-                                <button class="bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
-                                <button class="bg-red-500 text-white px-2 py-1 rounded">Borrar</button>
+                        <tr>
+                            <td>{{$articulo->id_articulo}}</td>
+                            <td>{{$articulo->nombre_articulo}}</td>
+                            <td>${{$articulo->precio_articulo}}</td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editar_articulo{{$articulo->id_articulo}}"> Editar </a>
+                                <a href='{{route("article.delete", $articulo->id_articulo)}}' onclick="return res()" class="btn btn-danger btn-sm"> Eliminar</a>
                             </td>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </section>
+                        <!-- modal edit article -->
+                        <div class="modal fade" id="editar_articulo{{$articulo->id_articulo}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Producto</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action='{{route("article.update")}}' method="post">
+                                            @csrf
+                                            <div class="mb-3">
+                                                <!-- <label for="codigo" class="form-label">Código Producto:</label> -->
+                                                <input type="hidden" class="form-control" id="id_art" name="id_art" value="{{$articulo->id_articulo}}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nombre" class="form-label">Nombre De Producto:</label>
+                                                <input type="text" class="form-control" id="nombre_art" name="nombre_art" value="{{$articulo->nombre_articulo}}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="precio" class="form-label">Precio:</label>
+                                                <input type="text" class="form-control" id="precio_art" name="precio_art" value="{{$articulo->precio_articulo}}">
+                                            </div>
+                                            <button type="submit" class="btn btn-info">Modificar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- /. modal edit article -->
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <form action='{{route("article.create")}}' method="post">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre De Producto:</label>
+                                <input type="text" class="form-control" id="nombre_art" name="nombre_art">
+                            </div>
+                            <div class="mb-3">
+                                <label for="precio" class="form-label">Precio:</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><b>$</b></span>
+                                    <input type="text" class="form-control" id="precio_art" name="precio_art">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">Agregar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
