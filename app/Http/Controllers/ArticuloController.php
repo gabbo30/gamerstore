@@ -41,10 +41,31 @@ class ArticuloController extends Controller
                 'precio_articulo' => $request->precio_art,
             ]);
 
-        if ($updated) {
+        if ($updated)
+        {
             return back()->with("Bien", "Producto actualizado");
-        } else {
+        }
+        else
+        {
             return back()->with("Error", "Producto NO actualizado");
         }
+    }
+
+    public function delete_article($id)
+    {
+        $product = Articulo::find($id);
+
+    if ($product) {
+        // eliminar usando el ORM
+        $deleted = $product->delete();
+
+        if ($deleted) {
+            return back()->with("Bien", "Producto Eliminado");
+        } else {
+            return back()->with("Error", "Producto NO Eliminado");
+        }
+    } else {
+        return back()->with("Error", "Producto NO encontrado");
+    }
     }
 }

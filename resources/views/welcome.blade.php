@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                         </div>
-                         <!-- /. modal edit article -->
+                        <!-- /. modal edit article -->
                         @endforeach
                     </tbody>
                 </table>
